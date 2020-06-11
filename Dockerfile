@@ -10,15 +10,12 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
     lsb-release \
     gnupg2 \
     bash \
-    wget \
   && update-alternatives --install /usr/bin/vim vim /usr/bin/vim.tiny 1 
-
 
 RUN curl https://dl.google.com/cloudagents/add-monitoring-agent-repo.sh | bash -
 RUN apt-get update
 RUN apt-get install -y stackdriver-agent
-RUN cd /opt/stackdriver/collectd/etc/collectd.d/ && wget --no-verbose https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/collectd.d/statsd.conf
-
+COPY statsd.conf /opt/stackdriver/collectd/etc/collectd.d/
 ADD entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
